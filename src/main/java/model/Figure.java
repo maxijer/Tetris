@@ -22,7 +22,7 @@ public enum Figure {
     T4(1, 0, 1, 1, 2, 1, 1, 2),
     Z1(0, 1, 1, 1, 1, 2, 2, 2),
     Z2(2, 0, 1, 1, 2, 1, 1, 2);
-    private ArrayList<Coord> dot;
+    public ArrayList<Coord> dot;
 
     Figure(int... coords) {
         dot = new ArrayList<Coord>();
