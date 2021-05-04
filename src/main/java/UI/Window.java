@@ -13,7 +13,20 @@ public class Window extends JFrame {
         setTitle("Tetris");
         setLocationRelativeTo(null);
         setVisible(true);
+        BoxesInit();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    }
+
+    private void BoxesInit()
+    {
+        for (int x = 0; x < Config.WIDTH; x ++)
+        {
+            for (int y = 0; y < Config.HEIGHT; y ++)
+            {
+                Block block = new Block(x, y);
+                add(block);
+            }
+        }
     }
 
 }
