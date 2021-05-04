@@ -5,7 +5,7 @@ import model.Figure;
 
 import javax.swing.*;
 
-public class Window extends JFrame {
+public class Window extends JFrame implements Runnable {
 
     private Block[][] boxes;
 
@@ -15,12 +15,16 @@ public class Window extends JFrame {
         BoxesInit();
     }
 
+    public void run() {
+        repaint();
+    }
+
     private void FormInit() {
         setSize(Config.WIDTH * Config.SIZE + 15, Config.HEIGHT * Config.SIZE + 30);
         setTitle("Tetris");
         setLocationRelativeTo(null);
         setVisible(true);
-        BoxesInit();
+        setLayout(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
@@ -45,7 +49,7 @@ public class Window extends JFrame {
 
     public void showShape(Figure figure, Coord at) {
         for (Coord dot : figure.dot) {
-            setBoxColor(at.x + dot.x, at.y + dot.y, 1);
+            setBoxColor(dot.x + at.x, dot.y + at.y, 1);
         }
     }
 }

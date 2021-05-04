@@ -13,7 +13,7 @@ public enum Figure {
     L2(0, 1, 1, 1, 2, 1, 0, 2),
     L3(0, 0, 1, 0, 1, 1, 1, 2),
     L4(2, 0, 0, 1, 1, 1, 2, 1),
-    O(0, 0, 1, 0, 0, 1, 1, 1),
+    O( 0, 0, 1, 0, 0, 1, 1, 1),
     S1(1, 1, 2, 1, 0, 2, 1, 2),
     S2(0, 0, 0, 1, 1, 1, 1, 2),
     T1(0, 1, 1, 1, 2, 1, 1, 2),
@@ -110,9 +110,8 @@ public enum Figure {
             return T3;
         } else if (this == Z1) {
             return Z2;
-        } else if (this == Z2) {
+        } else {
             return Z1;
         }
-        return O;
     }
 }

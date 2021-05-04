@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class Block extends JPanel {
     public Block(int x, int y) {
-        setBounds(Config.WIDTH, Config.HEIGHT, x * Config.SIZE, y * Config.SIZE);
+        setBounds(x * Config.SIZE, y * Config.SIZE, Config.SIZE, Config.SIZE);
         setBackground(Config.background);
         setVisible(true);
         setLayout(null);
