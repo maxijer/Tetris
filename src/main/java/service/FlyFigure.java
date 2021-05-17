@@ -45,8 +45,14 @@ public class FlyFigure {
         }
     }
 
-    public void go_shape() {
-        Figure rotate = active_figure.go_right();
+    public void go_shape(int direction) {
+        Figure rotate;
+        if (direction == 1) {
+            rotate = active_figure.go_right();
+        }
+        else {
+            rotate = active_figure.go_left();
+        }
         if (!CanMoveShape(rotate, 0, 0)) {
             return;
         }

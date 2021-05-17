@@ -5,9 +5,7 @@ import model.Figure;
 import service.FlyFigure;
 
 import javax.swing.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
 public class Window extends JFrame implements Runnable {
 
@@ -19,6 +17,16 @@ public class Window extends JFrame implements Runnable {
         FormInit();
         BoxesInit();
         addKeyListener(new KeyAdapter());
+        TimeAdapter time_adapter = new TimeAdapter();
+        Timer timer = new Timer(1000, time_adapter);
+        timer.start();
+    }
+    class TimeAdapter implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            moveFly(0, 1);
+        }
     }
 
     public void showShape() {
@@ -34,7 +42,12 @@ public class Window extends JFrame implements Runnable {
         showShape();
     }
 
-
+    private void go_fly(int direction)
+    {
+        hideShape();
+        fly.go_shape(direction);
+        showShape();
+    }
 
     class KeyAdapter implements KeyListener {
         @Override
@@ -47,13 +60,16 @@ public class Window extends JFrame implements Runnable {
             int ection = e.getKeyCode();
             hideShape();
             if (KeyEvent.VK_LEFT == ection) {
-                fly.moveShape(-1, 0);
+                moveFly(-1, 0);
             } else if (KeyEvent.VK_RIGHT == ection) {
-                fly.moveShape(+1, 0);
-            } else if (KeyEvent.VK_DOWN == ection) {
-                fly.moveShape(0, +1);
-            } else if (KeyEvent.VK_SPACE == ection) {
-                fly.go_shape();
+                moveFly(+1, 0);
+            }
+            else if (KeyEvent.VK_UP == ection)
+            {
+                fly.go_shape(1);
+            }
+            else if (KeyEvent.VK_DOWN == ection) {
+                fly.go_shape(2);
             }
             showShape();
         }
@@ -62,6 +78,13 @@ public class Window extends JFrame implements Runnable {
         public void keyReleased(KeyEvent e) {
 
         }
+    }
+
+    private void moveFly(int sx, int sy)
+    {
+        hideShape();
+        fly.moveShape(sx, sy);
+        showShape();
     }
 
     private void FormInit() {
