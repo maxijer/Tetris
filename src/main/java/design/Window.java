@@ -1,27 +1,24 @@
-package UI;
+package design;
 
-import model.Coord;
+import model.Coords;
 import model.Figure;
 
 import javax.swing.*;
 
 public class Window extends JFrame implements Runnable {
 
-    private Block[][] boxes;
+    private Block[][] blocks;
 
     public Window() {
-        boxes = new Block[Config.WIDTH][Config.HEIGHT];
+        blocks = new Block[Config.WIDTH][Config.HEIGHT];
         FormInit();
         BoxesInit();
-    }
-
-    public void run() {
-        repaint();
     }
 
     private void FormInit() {
         setSize(Config.WIDTH * Config.SIZE + 15, Config.HEIGHT * Config.SIZE + 30);
         setTitle("Tetris");
+        setLocationRelativeTo(null);
         setLocationRelativeTo(null);
         setVisible(true);
         setLayout(null);
@@ -31,25 +28,29 @@ public class Window extends JFrame implements Runnable {
     private void BoxesInit() {
         for (int x = 0; x < Config.WIDTH; x++) {
             for (int y = 0; y < Config.HEIGHT; y++) {
-                boxes[x][y] = new Block(x, y);
-                add(boxes[x][y]);
+                blocks[x][y] = new Block(x, y);
+                add(blocks[x][y]);
             }
         }
     }
 
+    public void run() {
+        repaint();
+    }
+
     public void setBoxColor(int x, int y, int color) {
-        if (x < 0 || x >= Config.WIDTH) {
-            return;
-        }
         if (y < 0 || y >= Config.HEIGHT) {
             return;
         }
-        boxes[x][y].setColor(color);
+        if (x < 0 || x >= Config.WIDTH) {
+            return;
+        }
+        blocks[x][y].setColor(color);
     }
 
-    public void showShape(Figure figure, Coord at) {
-        for (Coord dot : figure.dot) {
-            setBoxColor(dot.x + at.x, dot.y + at.y, 1);
+    public void showShape(Figure figure, Coords pos) {
+        for (Coords coord : figure.list_of_coords) {
+            setBoxColor(coord.x + pos.x, coord.y + pos.y, 1);
         }
     }
 }

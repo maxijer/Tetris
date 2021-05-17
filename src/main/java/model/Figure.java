@@ -2,7 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
-public enum Figure {
+public enum Figure { // да, да я использую именно enum, чтобы дать точное перечисление возможных классов
+    // В этом классе у меня будут лежать все виды фигур и их быстрая смена по нажатию на кнопку
     I1(0, 1, 1, 1, 2, 1, 3, 1),
     I2(1, 0, 1, 1, 1, 2, 1, 3),
     J1(1, 0, 1, 1, 0, 2, 1, 2),
@@ -22,16 +23,16 @@ public enum Figure {
     T4(1, 0, 1, 1, 2, 1, 1, 2),
     Z1(0, 1, 1, 1, 1, 2, 2, 2),
     Z2(2, 0, 1, 1, 2, 1, 1, 2);
-    public ArrayList<Coord> dot;
+    public ArrayList<Coords> list_of_coords; // список координат
 
-    Figure(int... coords) {
-        dot = new ArrayList<Coord>();
+    private Figure(int... coords) { // передаю координаты в конструктор
+        list_of_coords = new ArrayList<Coords>();
         for (int i = 0; i < coords.length; i += 2) {
-            dot.add(new Coord(coords[i], coords[i + 1]));
+            list_of_coords.add(new Coords(coords[i], coords[i + 1]));
         }
     }
 
-    public Figure go_right() {
+    public Figure go_right() { // реализация возврата фигур при повороте на право
         if (this == I1) {
             return I2;
         } else if (this == I2) {
