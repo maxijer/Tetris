@@ -35,32 +35,36 @@ public class Window extends JFrame implements Runnable {
         showShape(active_figure, coords_active_figure, 1);
     }
 
-    public boolean CanMoveShape(int sx, int sy) {
-        int left = coords_active_figure.x + sx + active_figure.top.x;
+    public boolean CanMoveShape(Figure figure, int sx, int sy) {
+        int left = coords_active_figure.x + sx + figure.top.x;
         if (left < 0) {
             return false;
         }
-        int right = coords_active_figure.x + sx + active_figure.bottom.x;
+        int right = coords_active_figure.x + sx + figure.bottom.x;
         if (right >= Config.WIDTH) {
             return false;
         }
-        if (coords_active_figure.y + sy + active_figure.top.y < 0) {
+        if (coords_active_figure.y + sy + figure.top.y < 0) {
             return false;
         }
-        if (coords_active_figure.y + sy + active_figure.bottom.y >= Config.HEIGHT) {
+        if (coords_active_figure.y + sy + figure.bottom.y >= Config.HEIGHT) {
             return false;
         }
         return true;
     }
 
     public void moveShape(int sx, int sy) {
-        if (CanMoveShape(sx, sy)) {
+        if (CanMoveShape(active_figure, sx, sy)) {
             coords_active_figure = coords_active_figure.dobav(sx, sy);
         }
     }
 
     public void go_shape() {
-        active_figure = active_figure.go_right();
+        Figure rotate = active_figure.go_right();
+        if (!CanMoveShape(rotate, 0, 0)) {
+            return;
+        }
+        active_figure = rotate;
     }
 
     class KeyAdapter implements KeyListener {
