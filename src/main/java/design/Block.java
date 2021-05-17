@@ -3,7 +3,15 @@ package design;
 import javax.swing.*;
 
 public class Block extends JPanel {
+    private int color;
+
+    public int getColor()
+    {
+        return color;
+    }
+
     public Block(int x, int y) {
+        color = 0;
         setBounds(x * Config.SIZE, y * Config.SIZE, Config.SIZE, Config.SIZE);
         setVisible(true);
         setLayout(null);
@@ -11,10 +19,9 @@ public class Block extends JPanel {
     }
 
     public void setColor(int i) {
-        if (i == 0) {
-            setBackground(Config.background);
-        } else {
-            setBackground(Config.FORE);
+        this.color = i;
+        if (color >= 0 && color < Config.colors.length) {
+            setBackground(Config.colors[color]);
         }
     }
 }

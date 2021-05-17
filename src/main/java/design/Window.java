@@ -1,14 +1,13 @@
 package design;
 
 import model.Coords;
-import model.Figure;
+import model.Mapable;
 import service.FlyFigure;
 
 import javax.swing.*;
 import java.awt.event.*;
 
-public class Window extends JFrame implements Runnable {
-
+public class Window extends JFrame implements Runnable, Mapable {
     private Block[][] blocks;
     private FlyFigure fly;
 
@@ -18,14 +17,24 @@ public class Window extends JFrame implements Runnable {
         BoxesInit();
         addKeyListener(new KeyAdapter());
         TimeAdapter time_adapter = new TimeAdapter();
-        Timer timer = new Timer(1000, time_adapter);
+        Timer timer = new Timer(200, time_adapter);
         timer.start();
     }
+
+    @Override
+    public int getBoxColor(int x, int y) {
+        return blocks[x][y].getColor();
+    }
+
     class TimeAdapter implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             moveFly(0, 1);
+            if (fly.fall) {
+                showShape(2);
+                add_new_figure();
+            }
         }
     }
 
@@ -38,12 +47,11 @@ public class Window extends JFrame implements Runnable {
     }
 
     public void add_new_figure() {
-        fly = new FlyFigure();
+        fly = new FlyFigure(this);
         showShape();
     }
 
-    private void go_fly(int direction)
-    {
+    private void go_fly(int direction) {
         hideShape();
         fly.go_shape(direction);
         showShape();
@@ -63,12 +71,9 @@ public class Window extends JFrame implements Runnable {
                 moveFly(-1, 0);
             } else if (KeyEvent.VK_RIGHT == ection) {
                 moveFly(+1, 0);
-            }
-            else if (KeyEvent.VK_UP == ection)
-            {
+            } else if (KeyEvent.VK_UP == ection) {
                 fly.go_shape(1);
-            }
-            else if (KeyEvent.VK_DOWN == ection) {
+            } else if (KeyEvent.VK_DOWN == ection) {
                 fly.go_shape(2);
             }
             showShape();
@@ -80,8 +85,7 @@ public class Window extends JFrame implements Runnable {
         }
     }
 
-    private void moveFly(int sx, int sy)
-    {
+    private void moveFly(int sx, int sy) {
         hideShape();
         fly.moveShape(sx, sy);
         showShape();
