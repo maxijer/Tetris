@@ -14,7 +14,7 @@ public enum Figure { // да, да я использую именно enum, чт
     L2(0, 1, 1, 1, 2, 1, 0, 2),
     L3(0, 0, 1, 0, 1, 1, 1, 2),
     L4(2, 0, 0, 1, 1, 1, 2, 1),
-    O( 0, 0, 1, 0, 0, 1, 1, 1),
+    O(0, 0, 1, 0, 0, 1, 1, 1),
     S1(1, 1, 2, 1, 0, 2, 1, 2),
     S2(0, 0, 0, 1, 1, 1, 1, 2),
     T1(0, 1, 1, 1, 2, 1, 1, 2),
@@ -24,12 +24,47 @@ public enum Figure { // да, да я использую именно enum, чт
     Z1(0, 1, 1, 1, 1, 2, 2, 2),
     Z2(2, 0, 1, 1, 2, 1, 1, 2);
     public ArrayList<Coords> list_of_coords; // список координат
+    public Coords top, bottom;
+
+    public static Figure get_random_figure() {
+        return Figure.values()[(int) (Math.random() * Figure.values().length)];
+    }
 
     private Figure(int... coords) { // передаю координаты в конструктор
         list_of_coords = new ArrayList<Coords>();
         for (int i = 0; i < coords.length; i += 2) {
             list_of_coords.add(new Coords(coords[i], coords[i + 1]));
         }
+        top = setTop();
+        bottom = setBottom();
+    }
+
+    private Coords setTop() {
+        int x = list_of_coords.get(0).x;
+        int y = list_of_coords.get(0).y;
+        for (Coords coords : list_of_coords) {
+            if (x > coords.x) {
+                x = coords.x;
+            }
+            if (y > coords.y) {
+                y = coords.y;
+            }
+        }
+        return new Coords(x, y);
+    }
+
+    private Coords setBottom() {
+        int x = list_of_coords.get(0).x;
+        int y = list_of_coords.get(0).y;
+        for (Coords coords : list_of_coords) {
+            if (x < coords.x) {
+                x = coords.x;
+            }
+            if (y < coords.y) {
+                y = coords.y;
+            }
+        }
+        return new Coords(x, y);
     }
 
     public Figure go_right() { // реализация возврата фигур при повороте на право

@@ -4,19 +4,95 @@ import model.Coords;
 import model.Figure;
 
 import javax.swing.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class Window extends JFrame implements Runnable {
 
     private Block[][] blocks;
+    private Figure active_figure;
+    private Coords coords_active_figure;
 
     public Window() {
         blocks = new Block[Config.WIDTH][Config.HEIGHT];
         FormInit();
         BoxesInit();
+        addKeyListener(new KeyAdapter());
+    }
+
+    public void showShape() {
+        showShape(active_figure, coords_active_figure, 1);
+    }
+
+    public void hideShape() {
+        showShape(active_figure, coords_active_figure, 0);
+    }
+
+    public void add_new_figure() {
+        active_figure = Figure.get_random_figure();
+        coords_active_figure = new Coords(5, 5);
+        showShape(active_figure, coords_active_figure, 1);
+    }
+
+    public boolean CanMoveShape(int sx, int sy) {
+        int left = coords_active_figure.x + sx + active_figure.top.x;
+        if (left < 0) {
+            return false;
+        }
+        int right = coords_active_figure.x + sx + active_figure.bottom.x;
+        if (right >= Config.WIDTH) {
+            return false;
+        }
+        if (coords_active_figure.y + sy + active_figure.top.y < 0) {
+            return false;
+        }
+        if (coords_active_figure.y + sy + active_figure.bottom.y >= Config.HEIGHT) {
+            return false;
+        }
+        return true;
+    }
+
+    public void moveShape(int sx, int sy) {
+        if (CanMoveShape(sx, sy)) {
+            coords_active_figure = coords_active_figure.dobav(sx, sy);
+        }
+    }
+
+    public void go_shape() {
+        active_figure = active_figure.go_right();
+    }
+
+    class KeyAdapter implements KeyListener {
+        @Override
+        public void keyTyped(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            int ection = e.getKeyCode();
+            hideShape();
+            if (KeyEvent.VK_LEFT == ection) {
+                moveShape(-1, 0);
+            } else if (KeyEvent.VK_RIGHT == ection) {
+                moveShape(+1, 0);
+            } else if (KeyEvent.VK_DOWN == ection) {
+                moveShape(0, +1);
+            } else if (KeyEvent.VK_SPACE == ection) {
+                go_shape();
+            }
+            showShape();
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+
+        }
     }
 
     private void FormInit() {
-        setSize(Config.WIDTH * Config.SIZE + 15, Config.HEIGHT * Config.SIZE + 30);
+        setSize(Config.WIDTH * Config.SIZE + 15, Config.HEIGHT * Config.SIZE + 39);
         setTitle("Tetris");
         setLocationRelativeTo(null);
         setLocationRelativeTo(null);
@@ -48,9 +124,9 @@ public class Window extends JFrame implements Runnable {
         blocks[x][y].setColor(color);
     }
 
-    public void showShape(Figure figure, Coords pos) {
+    public void showShape(Figure figure, Coords pos, int color) { // color = 0 - скрытие фигуры, color = 1- отображение фигуры
         for (Coords coord : figure.list_of_coords) {
-            setBoxColor(coord.x + pos.x, coord.y + pos.y, 1);
+            setBoxColor(coord.x + pos.x, coord.y + pos.y, color);
         }
     }
 }

@@ -8,4 +8,8 @@ public class Coords { // класс отвечающий за координат
         this.x = x;
         this.y = y;
     }
+
+    public Coords dobav(int sx, int sy) {
+        return new Coords(x + sx, y + sy);
+    }
 }
