@@ -2,6 +2,7 @@ package design;
 
 import model.Coords;
 import model.Figure;
+import service.FlyFigure;
 
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
@@ -11,8 +12,7 @@ import java.awt.event.KeyListener;
 public class Window extends JFrame implements Runnable {
 
     private Block[][] blocks;
-    private Figure active_figure;
-    private Coords coords_active_figure;
+    private FlyFigure fly;
 
     public Window() {
         blocks = new Block[Config.WIDTH][Config.HEIGHT];
@@ -22,50 +22,19 @@ public class Window extends JFrame implements Runnable {
     }
 
     public void showShape() {
-        showShape(active_figure, coords_active_figure, 1);
+        showShape(1);
     }
 
     public void hideShape() {
-        showShape(active_figure, coords_active_figure, 0);
+        showShape(0);
     }
 
     public void add_new_figure() {
-        active_figure = Figure.get_random_figure();
-        coords_active_figure = new Coords(5, 5);
-        showShape(active_figure, coords_active_figure, 1);
+        fly = new FlyFigure();
+        showShape();
     }
 
-    public boolean CanMoveShape(Figure figure, int sx, int sy) {
-        int left = coords_active_figure.x + sx + figure.top.x;
-        if (left < 0) {
-            return false;
-        }
-        int right = coords_active_figure.x + sx + figure.bottom.x;
-        if (right >= Config.WIDTH) {
-            return false;
-        }
-        if (coords_active_figure.y + sy + figure.top.y < 0) {
-            return false;
-        }
-        if (coords_active_figure.y + sy + figure.bottom.y >= Config.HEIGHT) {
-            return false;
-        }
-        return true;
-    }
 
-    public void moveShape(int sx, int sy) {
-        if (CanMoveShape(active_figure, sx, sy)) {
-            coords_active_figure = coords_active_figure.dobav(sx, sy);
-        }
-    }
-
-    public void go_shape() {
-        Figure rotate = active_figure.go_right();
-        if (!CanMoveShape(rotate, 0, 0)) {
-            return;
-        }
-        active_figure = rotate;
-    }
 
     class KeyAdapter implements KeyListener {
         @Override
@@ -78,13 +47,13 @@ public class Window extends JFrame implements Runnable {
             int ection = e.getKeyCode();
             hideShape();
             if (KeyEvent.VK_LEFT == ection) {
-                moveShape(-1, 0);
+                fly.moveShape(-1, 0);
             } else if (KeyEvent.VK_RIGHT == ection) {
-                moveShape(+1, 0);
+                fly.moveShape(+1, 0);
             } else if (KeyEvent.VK_DOWN == ection) {
-                moveShape(0, +1);
+                fly.moveShape(0, +1);
             } else if (KeyEvent.VK_SPACE == ection) {
-                go_shape();
+                fly.go_shape();
             }
             showShape();
         }
@@ -128,9 +97,9 @@ public class Window extends JFrame implements Runnable {
         blocks[x][y].setColor(color);
     }
 
-    public void showShape(Figure figure, Coords pos, int color) { // color = 0 - скрытие фигуры, color = 1- отображение фигуры
-        for (Coords coord : figure.list_of_coords) {
-            setBoxColor(coord.x + pos.x, coord.y + pos.y, color);
+    public void showShape(int color) { // color = 0 - скрытие фигуры, color = 1- отображение фигуры
+        for (Coords coord : fly.get_shape().list_of_coords) {
+            setBoxColor(coord.x + fly.get_coords().x, coord.y + fly.get_coords().y, color);
         }
     }
 }
