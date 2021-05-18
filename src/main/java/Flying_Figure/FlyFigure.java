@@ -1,15 +1,16 @@
-package service;
+package Flying_Figure;
 
 import design.Config;
 import model.Coords;
+import model.Coords_and_colors;
 import model.Figure;
-import model.Mapable;
+import model.Coords_and_colors;
 
 public class FlyFigure {
     private Figure active_figure;
     private int ticks;
     private Coords coords_active_figure;
-    Mapable map;
+    Coords_and_colors map;
     public boolean fall;
 
     public Figure get_shape() {
@@ -20,7 +21,7 @@ public class FlyFigure {
         return coords_active_figure;
     }
 
-    public FlyFigure(Mapable map) {
+    public FlyFigure(Coords_and_colors map) {
         this.map = map;
         active_figure = Figure.get_random_figure();
         coords_active_figure = new Coords(Config.WIDTH / 2 - 2, -active_figure.top.y + 2);
@@ -50,6 +51,12 @@ public class FlyFigure {
         }
         return true;
     }
+
+    public boolean canPlaceShape()
+    {
+        return CanMoveShape(active_figure, 0, 0);
+    }
+
 
     public void moveShape(int sx, int sy) {
         if (CanMoveShape(active_figure, sx, sy)) {

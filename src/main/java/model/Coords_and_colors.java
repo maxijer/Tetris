@@ -1,5 +1,5 @@
 package model;
 
-public interface Mapable {
+public interface Coords_and_colors {
     int getBoxColor(int x, int y);
 }

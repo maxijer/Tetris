@@ -27,7 +27,7 @@ public enum Figure { // да, да я использую именно enum, чт
     public Coords top, bottom;
 
     public static Figure get_random_figure() {
-        switch ((((int) Math.random()) * 7) % 7) {
+        switch ((int) (Math.random() * 7)) {
             case 0:
                 return I1;
             case 1:

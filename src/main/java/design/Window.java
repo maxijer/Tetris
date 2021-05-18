@@ -1,15 +1,16 @@
 package design;
 
+import Flying_Figure.FlyFigure;
 import model.Coords;
-import model.Mapable;
-import service.FlyFigure;
+import model.Coords_and_colors;
 
 import javax.swing.*;
 import java.awt.event.*;
 
-public class Window extends JFrame implements Runnable, Mapable {
+public class Window extends JFrame implements Runnable, Coords_and_colors {
     private Block[][] blocks;
     private FlyFigure fly;
+    private int schet = 0, mls = 200;
 
     public Window() {
         blocks = new Block[Config.WIDTH][Config.HEIGHT];
@@ -17,7 +18,7 @@ public class Window extends JFrame implements Runnable, Mapable {
         BoxesInit();
         addKeyListener(new KeyAdapter());
         TimeAdapter time_adapter = new TimeAdapter();
-        Timer timer = new Timer(100, time_adapter);
+        Timer timer = new Timer(mls, time_adapter);
         timer.start();
     }
 
@@ -55,7 +56,11 @@ public class Window extends JFrame implements Runnable, Mapable {
     private void stripLines() {
         for (int y = Config.HEIGHT - 1; y >= 0; y--) {
             while (is_full_line(y)) {
+                schet += 100;
                 dropLine(y);
+                if (schet % 100 == 0) {
+                    mls -= 5;
+                }
             }
         }
     }
@@ -69,13 +74,6 @@ public class Window extends JFrame implements Runnable, Mapable {
                 showShape(2);
                 stripLines();
                 add_new_figure();
-                for (int i = 0; i < Config.WIDTH; i++) {
-                    for (int j = 0; j < Config.HEIGHT; j++) {
-                        System.out.print(blocks[i][j].getColor() + " ");
-                    }
-                    System.out.println();
-                }
-                System.out.println("-------------");
             }
         }
     }
@@ -90,7 +88,13 @@ public class Window extends JFrame implements Runnable, Mapable {
 
     public void add_new_figure() {
         fly = new FlyFigure(this);
-        showShape();
+        if (!fly.canPlaceShape()) {
+            setVisible(false);
+            dispose();
+            System.exit(0);
+        } else {
+            showShape();
+        }
     }
 
     private void go_fly(int direction) {
