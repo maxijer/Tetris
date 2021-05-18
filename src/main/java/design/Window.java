@@ -17,13 +17,47 @@ public class Window extends JFrame implements Runnable, Mapable {
         BoxesInit();
         addKeyListener(new KeyAdapter());
         TimeAdapter time_adapter = new TimeAdapter();
-        Timer timer = new Timer(200, time_adapter);
+        Timer timer = new Timer(100, time_adapter);
         timer.start();
     }
 
     @Override
     public int getBoxColor(int x, int y) {
+        if (y < 0 || y >= Config.HEIGHT) {
+            return -1;
+        }
+        if (x < 0 || x >= Config.WIDTH) {
+            return -1;
+        }
         return blocks[x][y].getColor();
+    }
+
+    private boolean is_full_line(int y) {
+        for (int x = 0; x < Config.WIDTH; x++) {
+            if (getBoxColor(x, y) != 2) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void dropLine(int y) {
+        for (int my = y - 1; my >= 0; my--) {
+            for (int x = 0; x < Config.WIDTH; x++) {
+                setBoxColor(x, my + 1, getBoxColor(x, my));
+            }
+        }
+        for (int x = 0; x < Config.WIDTH; x++) {
+            setBoxColor(x, 0, 0);
+        }
+    }
+
+    private void stripLines() {
+        for (int y = Config.HEIGHT - 1; y >= 0; y--) {
+            while (is_full_line(y)) {
+                dropLine(y);
+            }
+        }
     }
 
     class TimeAdapter implements ActionListener {
@@ -33,7 +67,15 @@ public class Window extends JFrame implements Runnable, Mapable {
             moveFly(0, 1);
             if (fly.fall) {
                 showShape(2);
+                stripLines();
                 add_new_figure();
+                for (int i = 0; i < Config.WIDTH; i++) {
+                    for (int j = 0; j < Config.HEIGHT; j++) {
+                        System.out.print(blocks[i][j].getColor() + " ");
+                    }
+                    System.out.println();
+                }
+                System.out.println("-------------");
             }
         }
     }

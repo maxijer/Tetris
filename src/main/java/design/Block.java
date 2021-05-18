@@ -21,7 +21,7 @@ public class Block extends JPanel {
     public void setColor(int i) {
         this.color = i;
         if (color >= 0 && color < Config.colors.length) {
-            setBackground(Config.colors[color]);
+            setBackground(Config.colors[i]);
         }
     }
 }
